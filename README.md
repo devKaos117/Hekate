@@ -52,11 +52,11 @@ kill -9 1
 ### Applied Technologies <a name = "technical-description-techs"></a>
 
 #### Development Environment
-&emsp;&emsp;<a href="https://archlinux.org/">![Static Badge](https://img.shields.io/badge/vXX-%23FFFFFF?style=flat&logo=archlinux&logoColor=%1793D1&logoSize=auto&label=Arch&labelColor=%23000000&color=%23333333&link=https%3A%2F%2Fwww.archlinux.org)</a>
+&emsp;&emsp;<a href="https://fedoraproject.org/">![Static Badge](https://img.shields.io/badge/v42-%23FFFFFF?style=flat&logo=fedora&logoColor=%51a2da&logoSize=auto&label=Fedora&labelColor=%23000000&color=%23333333&link=https%3A%2F%2Fwww.fedoraproject.org)</a>
 <br>
-&emsp;&emsp;<a href="https://www.zsh.org" target="_blank">![Static Badge](https://img.shields.io/badge/vX.X-%23FFFFFF?style=flat&logo=zsh&logoColor=%23F15A24&logoSize=auto&label=zsh&labelColor=%23000000&color=%23333333&link=https%3A%2F%2Fwww.zsh.org)</a>
+&emsp;&emsp;<a href="https://www.zsh.org" target="_blank">![Static Badge](https://img.shields.io/badge/v5.9-%23FFFFFF?style=flat&logo=zsh&logoColor=%23F15A24&logoSize=auto&label=zsh&labelColor=%23000000&color=%23333333&link=https%3A%2F%2Fwww.zsh.org)</a>
 <br>
-&emsp;&emsp;<a href="https://code.visualstudio.com" target="_blank">![Static Badge](https://img.shields.io/badge/vX.XX.X-%23FFFFFF?style=flat&logo=codecrafters&logoColor=%230065A9&logoSize=auto&label=VS%20Code&labelColor=%23000000&color=%23333333&link=https%3A%2F%2Fcode.visualstudio.com)</a>
+&emsp;&emsp;<a href="https://code.visualstudio.com" target="_blank">![Static Badge](https://img.shields.io/badge/v1.105.1-%23FFFFFF?style=flat&logo=codecrafters&logoColor=%230065A9&logoSize=auto&label=VS%20Code&labelColor=%23000000&color=%23333333&link=https%3A%2F%2Fcode.visualstudio.com)</a>
 
 
 #### Application Components
