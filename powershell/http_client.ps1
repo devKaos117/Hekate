@@ -6,7 +6,6 @@ $ErrorActionPreference = 'Stop'
 # ============================================================================
 
 # ===================== Variables
-$script:SessionCookies = @{}
 $script:ProxyCredentials = $null
 $retryableStatusCodes = @(
 	408,	# Request Timeout
