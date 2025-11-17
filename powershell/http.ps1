@@ -1,12 +1,19 @@
-#Requires -Version 5.1
+# ============================================================================
+# USAGE
+# ============================================================================
+#
+
+# ============================================================================
+# INITIALIZATIONS
+# ============================================================================
+
 $ErrorActionPreference = 'Stop'
 
-# ============================================================================
-# HTTP CLIENT
-# ============================================================================
+# ============ Importing
+./logger.ps1
 
-# ===================== Variables
-$script:ProxyCredentials = $null
+# ============ Variables
+Set-Variable ProxyCredentials -Scope Script -Visibility Private -Value $null
 $retryableStatusCodes = @(
 	408,	# Request Timeout
 	429,	# Too Many Requests
@@ -16,57 +23,24 @@ $retryableStatusCodes = @(
 	504		# Gateway Timeout
 )
 
-# ===================== Functions
-# ======= Logger
-function script:Log-Host {
-	[CmdletBinding()]
-	param (
-		# Log level
-		[Parameter(Mandatory=$true, Position=0)]
-		[ValidateSet('Error', 'Warning', 'Info')]
-		[string] $Level,
+# ============================================================================
+# PRIVATE FUNCTIONS
+# ============================================================================
 
-		# Log message
-		[Parameter(Mandatory=$true, Position=1)]
-		[string] $Message
-	)
-
-	process {
-		$Timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-
-		switch ($Level) {
-			'Error' {
-				$Bullet = '[-]'
-				$Color = 'Red'
-			}
-			'Warning' {
-				$Bullet = '[*]'
-				$Color = 'Yellow'
-			}
-			'Info' {
-				$Bullet = '[+]'
-				$Color = 'Green'
-			}
-		}
-
-		Write-Host -ForegroundColor $Color "$Bullet $Timestamp - $Message"
-	}
-}
-
-# ======= Proxy connection
+# ============ Proxy connection
 function Initialize-ProxyConnection {
 	param(
+		# Protocol
+		[Parameter(Mandatory = $true, Position = 0)]
+		[ValidateSet('HTTP', 'HTTPS', 'SOCKS4', 'SOCKS5')]
+		[string] $ProxyProtocol,
+
 		# URI
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory = $true, Position = 1)]
 		[System.Uri] $ProxyUri,
 
-		# Protocol
-		[Parameter(Mandatory = $false)]
-		[ValidateSet('HTTP', 'HTTPS', 'SOCKS4', 'SOCKS5')]
-		[string] $ProxyProtocol = 'HTTP',
-
 		# Username
-		[Parameter(Mandatory = $false)]
+		[Parameter(Mandatory = $false, Position = 2)]
 		[string] $Username
 	)
 
@@ -76,26 +50,26 @@ function Initialize-ProxyConnection {
 
 	# Configure credentials if username provided
 	if ($Username) {
-		Write-Host "Enter proxy password for user $Username:" -ForegroundColor White
+		Write-Host "Enter password for proxy user ${Username}:" -ForegroundColor White
 		$securePassword = Read-Host -AsSecureString
 
 		# Store credentials securely
-		$script:ProxyCredentials = New-Object System.Management.Automation.PSCredential($Username, $securePassword)
+		$ProxyCredentials = New-Object System.Management.Automation.PSCredential($Username, $securePassword)
 	}
 
 	# Return proxy configuration object
 	$proxyConfig = @{
-		Uri = $proxyObj
+		Uri = $ProxyUri
 		Protocol = $ProxyProtocol
-		Credentials = $script:ProxyCredentials
+		Credentials = $ProxyCredentials
 	}
 
-	Log-Host 'Info' "$ProxyProtocol proxy configured: $ProxyUri"
+	Write-Log 'Info' "$ProxyProtocol proxy configured: $ProxyUri"
 
 	return $proxyConfig
 }
 
-# HTTP request
+# ============ HTTP request
 function Send-HttpReq {
 	[CmdletBinding()]
 	param (
@@ -106,7 +80,7 @@ function Send-HttpReq {
 
 		# URL
 		[Parameter(Mandatory = $true, Position=1)]
-		[System.Uri] $Uri
+		[System.Uri] $Uri,
 
 		# Headers
 		[Parameter(Mandatory = $false)]
@@ -133,7 +107,7 @@ function Send-HttpReq {
 
 		# Proxy configuration object
 		[Parameter(Mandatory = $false)]
-		[object] $ProxyConfig = $null
+		[object] $ProxyConfig = $null,
 
 		# Session name
 		[Parameter(Mandatory = $false)]
@@ -150,7 +124,7 @@ function Send-HttpReq {
 			try {
 				# Prepare Invoke-WebRequest parameters
 				$requestParams = @{
-					Uri = $Url
+					Uri = $Uri
 					Method = $Method
 					Headers = $Headers.Clone()
 					TimeoutSec = $Timeout
@@ -203,13 +177,13 @@ function Send-HttpReq {
 				if ($statusCode -and $statusCode -in $retryableStatusCodes -and $attemptCount -lt $MaxAttempts) {
 					# Calculate backoff delay (exponential backoff)
 					$delaySeconds = [Math]::Min(2, [Math]::Pow(2, $attemptCount - 1))
-					Log-Host 'Info' "Waiting $delaySeconds seconds before retry..."
+					Write-Log 'Info' "Waiting $delaySeconds seconds before retry..."
 					Start-Sleep -Seconds $delaySeconds
 					continue
 				}
 
 				# Non-retryable error - give up immediately
-				Log-Host 'Error' "HTTP request error: $($_.Exception.Message)"
+				Write-Log 'Error' "HTTP request error: $($_.Exception.Message)"
 				throw "Failed to perform HTTP request after $attemptCount attempts"
 			}
 		}
@@ -217,11 +191,3 @@ function Send-HttpReq {
 		exit 1
 	}
 }
-
-# ============================================================================
-# EXPORT FUNCTIONS
-# ============================================================================
-
-# Export-ModuleMember -Function @(
-# 	'Send-HttpReq',
-# )
