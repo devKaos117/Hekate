@@ -1,0 +1,18 @@
+[package]
+name = "hekate"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+[workspace]
+members = [
+	"libs/janus",
+	"libs/loki",
+	"libs/mnemosyne",
+	"libs/moirai",
+	"libs/polyhymnia",
+	"libs/thoth"
+]
+
+[workspace.dependencies]

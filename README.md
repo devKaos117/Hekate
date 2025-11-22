@@ -5,6 +5,7 @@
 -	[About](#about)
 	-	[Summary](#about-summary)
 	-	[Features](#about-features)
+	-	[Structure](#about-structure)
 - [Usage](#usage)
 	-	[Installation](#usage-installation)
 	-	[Examples](#usage-examples)
@@ -27,6 +28,22 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat mass
 
 - **Phasellus placerat massa**
 	- vitae orci gravida
+
+### Structure <a name = "about-structure"></a>
+
+```txt
+hekate/
+├── libs/
+│	├── janus/ # proxy and tunneling
+│	├── loki/ # spoofing and deception
+│	├── mnemosyne/ # db and storage
+│	├── moirai/ # proccess management
+│	├── polyhymnia/ # strings
+│	└── thoth/ # logger
+├── proto/
+├── Cargo.toml
+└── main.rs
+```
 
 ---
 
