@@ -98,10 +98,10 @@ function Get-CallerInfo {
 function Write-LogMessage {
 	[CmdletBinding()]
 	param(
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory)]
 		[int]$Level,
 
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory)]
 		[string]$Message
 	)
 

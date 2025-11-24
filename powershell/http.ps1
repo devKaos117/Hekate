@@ -32,7 +32,7 @@ $retryableStatusCodes = @(
 # ============ Detect proxy authentication method
 function Get-ProxyAuthMethod {
 	param(
-		[Parameter(Mandatory = $true)]
+		[Parameter(Mandatory)]
 		[System.Uri] $ProxyUri
 	)
 
@@ -49,7 +49,7 @@ function Get-ProxyAuthMethod {
 		}
 
 		try {
-			$response = Invoke-WebRequest @testParams -ErrorAction Stop
+			$null = Invoke-WebRequest @testParams -ErrorAction Stop
 			Write-Log "Info" "Proxy does not require authentication"
 			return "None"
 		} catch {
@@ -109,24 +109,24 @@ function Get-ProxyAuthMethod {
 function Initialize-ProxyConnection {
 	param(
 		# Protocol
-		[Parameter(Mandatory = $true, Position = 0)]
+		[Parameter(Mandatory, Position = 0)]
 		[ValidateSet("HTTP", "HTTPS", "SOCKS4", "SOCKS5")]
 		[string] $ProxyProtocol,
 
 		# URI
-		[Parameter(Mandatory = $true, Position = 1)]
+		[Parameter(Mandatory, Position = 1)]
 		[System.Uri] $ProxyUri,
 
 		# Username (use domain\username for Windows auth)
-		[Parameter(Mandatory = $false, Position = 2)]
+		[Parameter(Position = 2)]
 		[string] $Username,
 
 		# Use current Windows credentials (default credentials)
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[switch] $UseDefaultCredentials = $false,
 
 		# Force specific authentication method
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[ValidateSet("Auto", "Basic", "NTLM", "Negotiate", "Digest", "None")]
 		[string] $AuthMethod = "Auto"
 	)
@@ -152,7 +152,7 @@ function Initialize-ProxyConnection {
 			$credentials = [System.Net.CredentialCache]::DefaultNetworkCredentials
 		}
 		elseif ($Username) {
-			Write-Host "Enter password for proxy user ${Username}:" -ForegroundColor White
+			Write-Host "Enter with the password for proxy user ${Username}:" -ForegroundColor White
 			$securePassword = Read-Host -AsSecureString
 			$credentials = New-Object System.Management.Automation.PSCredential($Username, $securePassword)
 		}
@@ -184,43 +184,43 @@ function Send-HttpReq {
 	[CmdletBinding()]
 	param (
 		# Method
-		[Parameter(Mandatory = $true, Position=0)]
+		[Parameter(Mandatory, Position=0)]
 		[ValidateSet("GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS")]
 		[string] $Method,
 
 		# URL
-		[Parameter(Mandatory = $true, Position=1)]
+		[Parameter(Mandatory, Position=1)]
 		[System.Uri] $Uri,
 
 		# Headers
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[hashtable] $Headers = @{},
 
 		# Request Body
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[string] $Body,
 
 		# Timeout in seconds
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[ValidateRange(1, 3600)]
 		[int] $Timeout = 30,
 
 		# Expected HTTP response code
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[ValidateRange(100, 599)]
 		[int] $ExpectedResponseCode = 200,
 
 		# Max request attempts
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[ValidateRange(1, 100)]
 		[int] $MaxAttempts = 3,
 
 		# Proxy configuration object
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[object] $ProxyConfig = $null,
 
 		# Session name
-		[Parameter(Mandatory = $false)]
+		[Parameter()]
 		[string] $SessionName = "session"
 
 	)
