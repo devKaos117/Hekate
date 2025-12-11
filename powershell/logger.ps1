@@ -1,15 +1,4 @@
 # ============================================================================
-# USAGE
-# ============================================================================
-# ./logger.ps1
-#
-# Write-Log Critical "Testing critical"
-# Write-Log Error "Testing error"
-# Write-Log Warning "Testing warning"
-# Write-Log Info "Testing info"
-# Write-Log Debug "Testing debug"
-
-# ============================================================================
 # INITIALIZATIONS
 # ============================================================================
 
@@ -42,17 +31,34 @@ Set-Variable LogColors -Option ReadOnly -Value @{
 	0 = "White"		# Custom
 }
 
+# ============ Configurations
 Set-Variable TimestampFormat -Option ReadOnly -Value "HH:mm:ss.fff"
-
-# ============ Default Configurations
-$CurrentLogLevel = $LOG_INFO
-$ColorizeMessage = $true
+Set-Variable CurrentLogLevel -Option ReadOnly -Value $LOG_INFO
+Set-Variable ColorizeMessage -Option ReadOnly -Value $true
 
 # ============================================================================
 # PRIVATE FUNCTIONS
 # ============================================================================
-
-# ============ Traceback the calling stack
+<#
+	.SYNOPSIS
+		Traceback the calling stack
+	.DESCRIPTION
+		...
+	.PARAMETER ...
+		...
+	.EXAMPLE
+		...
+	.INPUTS
+		...
+	.OUTPUTS
+		...
+	.COMPONENT
+		...
+	.LINK
+		...
+	.NOTES
+		...
+#>
 function Get-CallerInfo {
 	[CmdletBinding()]
 	param()
@@ -94,7 +100,26 @@ function Get-CallerInfo {
 	return "${processId}:${fileName}:${functionName}"
 }
 
-# ============ Write the log to the host
+<#
+	.SYNOPSIS
+		Write the log to the host
+	.DESCRIPTION
+		...
+	.PARAMETER ...
+		...
+	.EXAMPLE
+		...
+	.INPUTS
+		...
+	.OUTPUTS
+		...
+	.COMPONENT
+		...
+	.LINK
+		...
+	.NOTES
+		...
+#>
 function Write-LogMessage {
 	[CmdletBinding()]
 	param(
@@ -136,7 +161,26 @@ function Write-LogMessage {
 # PUBLIC API
 # ============================================================================
 
-# ============ Logging API
+<#
+	.SYNOPSIS
+		Logging function
+	.DESCRIPTION
+		...
+	.PARAMETER ...
+		...
+	.EXAMPLE
+		...
+	.INPUTS
+		...
+	.OUTPUTS
+		...
+	.COMPONENT
+		...
+	.LINK
+		...
+	.NOTES
+		...
+#>
 function Write-Log {
 	[CmdletBinding()]
 	param (
